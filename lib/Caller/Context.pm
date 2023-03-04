@@ -82,6 +82,12 @@ This module allows you to obtain this information in a more readable way. You
 can use string comparisons, or call methods on the returned object, with the
 latter probably being the most readable.
 
+CPAN already has the Want module, but this module requires XS and its API is
+quite different than this one. This module is written in pure perl yes is still
+faster than the Want module. See the benchmark.pl script in the author directory
+for more details. However, Want does offer more features and can detect boolean
+context, context that expects a subroutine, and so on.
+
 =head1 EXPORTS
 
 The only export is the context() function. If you would prefer to not import
@@ -129,6 +135,10 @@ Returns a true value if the object is an instance of Caller::Context::SCALAR,
 otherwise returns false.
 
 =back
+
+=head1 SEE ALSO
+
+Want
 
 =head1 AUTHOR
  
