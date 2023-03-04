@@ -5,19 +5,28 @@ use warnings;
 use Test::More;
 
 # Begin the tests! ############################################################
+
 use_ok('Caller::Context');
 
 # Test that the modlue is imported into a namespace
 package My::Test::Namespace::XXX1 {
 	use Caller::Context;
 }
-ok(My::Test::Namespace::XXX1->can('context'), 'context() function is imported successfully');
+ok(
+	My::Test::Namespace::XXX1->can('context'),
+	'context() function is imported successfully'
+);
 
 # Test that the modlue is imported into a namespace
 package My::Test::Namespace::XXX2 {
 	use Caller::Context ();
 }
-ok(!My::Test::Namespace::XXX2->can('context'), 'context() function should not be imported in `use MODULE ()` form');
+ok(
+	!My::Test::Namespace::XXX2->can('context'),
+	'context() function should not be imported in `use MODULE ()` form'
+);
+
+###############################################################################
 
 # Test string overloading and string eq
 my $context;
