@@ -17,29 +17,35 @@ Caller::Context -- A less cryptic replacement for perl's wantarray() function.
 
 # JUSTIFICATION
 
-Not only is the wantarray() function incorrectly named for the reason that there
-is no such thing as array context, but rather list context (even perldoc
-says it should have been called wantlist() instead), but also for the reason
-that it can actually tell you which context of three it's being called in:
-list, scalar, or void. So it really should have been three functions:
+Not only is the `wantarray` function incorrectly named for the reason that
+there is no such thing as array context (it is actually list context -- even
+perldoc says it should have been called wantlist instead), but also for the
+reason that it can actually tell you which context of three it's being called
+in: list, scalar, or void. So it really should have been three functions:
 wantlist(), wantscalar(), and wantvoid().
 
 This module allows you to obtain this information in a more readable way. You
 can use string comparisons, or call methods on the returned object, with the
 latter probably being the most readable.
 
+CPAN already has the [Want](https://metacpan.org/pod/Want) module, but that module requires XS and its API is
+quite different than this one. This module is written in pure perl but is still
+faster than [Want](https://metacpan.org/pod/Want). See the benchmark.pl script in the author directory for
+more details. However, note Want does offer more features and can detect boolean
+context, context that expects a subroutine, and so on.
+
 # EXPORTS
 
-The only export is the context() function. If you would prefer to not import
+The only export is the `context` function. If you would prefer to not import
 this function into your namespace, you can
 
         use Caller::Context ();
 
-and then call Caller::Context::context() instead.
+and then call `Caller::Context::context` instead.
 
 # FUNCTIONS
 
-- context()
+- context
 
     It takes no arguments and returns an instance of Caller::Context::VOID,
     Caller::Context::LIST, or Caller::Context::SCALAR (which all inherit from
@@ -47,7 +53,7 @@ and then call Caller::Context::context() instead.
     executing subroutine is being called.
 
     You may call methods on this object, or take advantage of its string overloading
-    and compare it to 'VOID', 'LIST', and 'SCALAR'.
+    and compare it to `'VOID'`, `'LIST'`, or `'SCALAR'`.
 
 # METHODS
 
@@ -67,6 +73,10 @@ The context() function returns an object that responds to the following methods:
 
     Returns a true value if the object is an instance of Caller::Context::SCALAR,
     otherwise returns false.
+
+# SEE ALSO
+
+[Want](https://metacpan.org/pod/Want)
 
 # AUTHOR
 

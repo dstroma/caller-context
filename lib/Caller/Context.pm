@@ -71,37 +71,37 @@ Caller::Context -- A less cryptic replacement for perl's wantarray() function.
 
 =head1 JUSTIFICATION
 
-Not only is the wantarray() function incorrectly named for the reason that there
-is no such thing as array context, but rather list context (even perldoc
-says it should have been called wantlist() instead), but also for the reason
-that it can actually tell you which context of three it's being called in:
-list, scalar, or void. So it really should have been three functions:
+Not only is the C<wantarray> function incorrectly named for the reason that
+there is no such thing as array context (it is actually list context -- even
+perldoc says it should have been called wantlist instead), but also for the
+reason that it can actually tell you which context of three it's being called
+in: list, scalar, or void. So it really should have been three functions:
 wantlist(), wantscalar(), and wantvoid().
 
 This module allows you to obtain this information in a more readable way. You
 can use string comparisons, or call methods on the returned object, with the
 latter probably being the most readable.
 
-CPAN already has the Want module, but this module requires XS and its API is
-quite different than this one. This module is written in pure perl yes is still
-faster than the Want module. See the benchmark.pl script in the author directory
-for more details. However, Want does offer more features and can detect boolean
+CPAN already has the L<Want> module, but that module requires XS and its API is
+quite different than this one. This module is written in pure perl but is still
+faster than L<Want>. See the benchmark.pl script in the author directory for
+more details. However, note Want does offer more features and can detect boolean
 context, context that expects a subroutine, and so on.
 
 =head1 EXPORTS
 
-The only export is the context() function. If you would prefer to not import
+The only export is the C<context> function. If you would prefer to not import
 this function into your namespace, you can
 
 	use Caller::Context ();
 
-and then call Caller::Context::context() instead.
+and then call C<Caller::Context::context> instead.
 
 =head1 FUNCTIONS
 
 =over 4
 
-=item context()
+=item context
 
 It takes no arguments and returns an instance of Caller::Context::VOID,
 Caller::Context::LIST, or Caller::Context::SCALAR (which all inherit from
@@ -109,7 +109,7 @@ Caller::Context::Object), according to the context in which the currently
 executing subroutine is being called.
 
 You may call methods on this object, or take advantage of its string overloading
-and compare it to 'VOID', 'LIST', and 'SCALAR'.
+and compare it to C<'VOID'>, C<'LIST'>, or C<'SCALAR'>.
 
 =back
 
@@ -138,7 +138,7 @@ otherwise returns false.
 
 =head1 SEE ALSO
 
-Want
+L<Want>
 
 =head1 AUTHOR
  
