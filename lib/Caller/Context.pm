@@ -60,14 +60,14 @@ Caller::Context -- A less cryptic replacement for perl's wantarray() function.
 
 	use Caller::Context;
 	sub mysub {
-		return 'void'   if context eq 'VOID';
-		return 'list'   if context->is_list;
-		return 'scalar' if context->isa('Caller::Context::SCALAR');
+		return 'wants nada' if context eq 'VOID'; # string compare
+		return 'wants list' if context->is_list;  # object method
+		return context;
 	}
 
-	mysub(); # void
-	my $x = mysub(); # scalar
-	my @x = mysub(); # list
+	mysub();         # returns 'wants nada'
+	my @x = mysub(); # returns 'wants list'
+	my $x = mysub(); # returns 'SCALAR'
 
 =head1 JUSTIFICATION
 
