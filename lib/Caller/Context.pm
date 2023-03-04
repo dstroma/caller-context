@@ -73,9 +73,10 @@ Caller::Context -- A less cryptic replacement for perl's wantarray() function.
 
 Not only is the wantarray() function incorrectly named for the reason that there
 is no such thing as array context, but rather list context (even perldoc
-says it should have been called wantlist() instead), but it can actually tell
-you whether the caller wants a list, scalar, or void. So it really should have
-been three functions: wantlist(), wantscalar(), and wantvoid().
+says it should have been called wantlist() instead), but also for the reason
+that it can actually tell you which context of three it's being called in:
+list, scalar, or void. So it really should have been three functions:
+wantlist(), wantscalar(), and wantvoid().
 
 This module allows you to obtain this information in a more readable way. You
 can use string comparisons, or call methods on the returned object, with the
