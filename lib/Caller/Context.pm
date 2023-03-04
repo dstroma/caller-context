@@ -54,7 +54,7 @@ package Caller::Context::SCALAR { our @ISA = ('Caller::Context::Object'); sub is
 
 =head1 NAME
 
-Caller::Context -- A less cryptic replacement for perl's wantarray builtin.
+Caller::Context -- A less cryptic replacement for perl's wantarray() function.
 
 =head1 SYNOPSIS
 
@@ -69,24 +69,46 @@ Caller::Context -- A less cryptic replacement for perl's wantarray builtin.
 	my $x = mysub(); # scalar
 	my @x = mysub(); # list
 
+=head1 JUSTIFICATION
+
+Not only is the wantarray() function incorrectly named for the reason that there
+is no such thing as array context, but rather list context (even perldoc
+says it should have been called wantlist() instead), but it can actually tell
+you whether the caller wants a list, scalar, or void. So it really should have
+been three functions: wantlist(), wantscalar(), and wantvoid().
+
+This module allows you to obtain this information in a more readable way. You
+can use string comparisons, or call methods on the returned object, with the
+latter probably being the most readable.
+
 =head1 EXPORTS
 
-The only export is the context() function. If you would prefer to fully qualify
-it, you can use Caller::Context::context() instead.
+The only export is the context() function. If you would prefer to not import
+this function into your namespace, you can
+
+	use Caller::Context ();
+
+and then call Caller::Context::context() instead.
 
 =head1 FUNCTIONS
 
-The only function is the context() function. It takes no arguments and it
-returns an instance of a Caller::Context::Object (either Caller::Context::VOID,
-::LIST, or ::SCALAR) depending upon the context in which the currently executing
-subroutine is being called.
+=over 4
 
-These Caller::Context::Object objects overload stringification and string
-equals, to equal 'VOID', 'LIST', or 'SCALAR' as appropriate.
+=item context()
+
+It takes no arguments and returns an instance of Caller::Context::VOID,
+Caller::Context::LIST, or Caller::Context::SCALAR (which all inherit from
+Caller::Context::Object), according to the context in which the currently
+executing subroutine is being called.
+
+You may call methods on this object, or compare it to the strings
+'VOID', 'LIST', and 'SCALAR'.
+
+=back
 
 =head1 METHODS
 
-The object returned by Caller::Context::context contains the following methods:
+The context() function returns an object that responds to the following methods:
 
 =over 4
 
@@ -108,8 +130,14 @@ otherwise returns false.
 =back
 
 =head1 AUTHOR
-
-Dondi Michael Stroma
-
+ 
+Dondi Michael Stroma, E<lt>dstroma@gmail.comE<gt>
+ 
+=head1 COPYRIGHT AND LICENSE
+ 
+Copyright (C) 2023 by Dondi Michael Stroma
+ 
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+ 
 =cut
-
