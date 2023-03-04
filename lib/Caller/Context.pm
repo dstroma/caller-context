@@ -19,9 +19,9 @@ package Caller::Context 0.001 {
 
 	sub context {
 		my $wantarray = (caller(1))[5];
-		return $voidobj   if !defined $wantarray;
-		return $listobj   if $wantarray;
-		return $scalarobj if !$wantarray;
+		return $void_obj   if !defined $wantarray;
+		return $list_obj   if $wantarray;
+		return $scalar_obj if !$wantarray;
 	}
 }
 
@@ -39,8 +39,8 @@ package Caller::Context::Object {
 		return ${$_[0]} eq $_[1];
 	}
 
-	sub is_void { undef }
-	sub is_list { undef }
+	sub is_void   { undef }
+	sub is_list   { undef }
 	sub is_scalar { undef }
 };
 
