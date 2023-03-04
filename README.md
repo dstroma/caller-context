@@ -46,8 +46,8 @@ and then call Caller::Context::context() instead.
     Caller::Context::Object), according to the context in which the currently
     executing subroutine is being called.
 
-    You may call methods on this object, or compare it to the strings
-    'VOID', 'LIST', and 'SCALAR'.
+    You may call methods on this object, or take advantage of its string overloading
+    and compare it to 'VOID', 'LIST', and 'SCALAR'.
 
 # METHODS
 
