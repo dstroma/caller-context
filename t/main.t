@@ -6,7 +6,9 @@ use Test::More;
 
 # Begin the tests! ############################################################
 
-use_ok('Caller::Context');
+BEGIN {
+	use_ok('Caller::Context');
+}
 
 # Test that the modlue is imported into a namespace
 package My::Test::Namespace::XXX1 {
@@ -61,5 +63,4 @@ done_testing();
 sub set_context {
 	$context = context;
 }
-
 
