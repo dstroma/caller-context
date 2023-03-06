@@ -1,52 +1,54 @@
 use warnings;
 use strict;
+use v5.12;
 
-package Caller::Context 0.001 {
-	use Exporter;
-	use parent 'Exporter';
-  
-	BEGIN {
-		our @EXPORT = ('context');
-	}
+package Caller::Context 0.001;
+use Exporter;
+use parent 'Exporter';
 
-	my $void_str   = 'VOID';
-	my $list_str   = 'LIST';
-	my $scalar_str = 'SCALAR';
+BEGIN {
+	our @EXPORT = ('context');
+}
 
-	my $void_obj   = bless \$void_str,   'Caller::Context::VOID';
-	my $list_obj   = bless \$list_str,   'Caller::Context::LIST';
-	my $scalar_obj = bless \$scalar_str, 'Caller::Context::SCALAR';
+my $void_str   = 'VOID';
+my $list_str   = 'LIST';
+my $scalar_str = 'SCALAR';
 
-	sub context {
-		my $wantarray = (caller(1))[5];
-		return $void_obj   if !defined $wantarray;
-		return $list_obj   if $wantarray;
-		return $scalar_obj if !$wantarray;
+my $void_obj   = bless \$void_str,   'Caller::Context::VOID';
+my $list_obj   = bless \$list_str,   'Caller::Context::LIST';
+my $scalar_obj = bless \$scalar_str, 'Caller::Context::SCALAR';
+
+sub context {
+	if (my $wantarray = (caller(1))[5]) {
+		$list_obj;
+	} elsif (defined $wantarray) {
+		$scalar_obj;
+	} else {
+		$void_obj;
 	}
 }
 
-package Caller::Context::Object {
-	use overload (
-		'""' => 'as_string',
-		'eq' => 'string_eq',
-	);
+package Caller::Context::Object;
+use overload (
+	'""' => 'as_string',
+	'eq' => 'string_eq',
+);
 
-	sub as_string {
-		return ${$_[0]};
-  	}
+sub as_string {
+	return ${$_[0]};
+}
 
-	sub string_eq {
-		return ${$_[0]} eq $_[1];
-	}
+sub string_eq {
+	return ${$_[0]} eq $_[1];
+}
 
-	sub is_void   { undef }
-	sub is_list   { undef }
-	sub is_scalar { undef }
-};
+sub is_void   { undef }
+sub is_list   { undef }
+sub is_scalar { undef }
 
-package Caller::Context::VOID   { our @ISA = ('Caller::Context::Object'); sub is_void   { 1 } };
-package Caller::Context::LIST   { our @ISA = ('Caller::Context::Object'); sub is_list   { 1 } };
-package Caller::Context::SCALAR { our @ISA = ('Caller::Context::Object'); sub is_scalar { 1 } };
+package Caller::Context::VOID;   our @ISA = ('Caller::Context::Object'); sub is_void   { 1 }
+package Caller::Context::LIST;   our @ISA = ('Caller::Context::Object'); sub is_list   { 1 }
+package Caller::Context::SCALAR; our @ISA = ('Caller::Context::Object'); sub is_scalar { 1 }
 
 1;
 
@@ -60,13 +62,13 @@ Caller::Context -- A less cryptic replacement for perl's wantarray() function.
 
 	use Caller::Context;
 	sub mysub {
-		return 'wants scalar' if context eq 'SCALAR'; # string compare
-		return ('wants list') if context->is_list;    # object method
+		return (qw/wants list/) if context->is_list;     # object interface
+		return 'wants scalar'   if context eq 'SCALAR';  # or use string eq
 		say context;
 	}
 
+	my @x = mysub(); # returns ('wants', 'list')
 	my $x = mysub(); # returns 'wants scalar'
-	my @x = mysub(); # returns ('wants list')
 	mysub();         # says 'VOID'
 
 =head1 JUSTIFICATION
@@ -79,14 +81,12 @@ in: list, scalar, or void. So it really should have been three functions:
 wantlist(), wantscalar(), and wantvoid().
 
 This module allows you to obtain this information in a more readable way. You
-can use string comparisons, or call methods on the returned object, with the
-latter probably being the most readable.
+can use string comparisons, or call methods on the returned object. The latter
+is not only faster but probably more readable.
 
 CPAN already has the L<Want> module, but that module requires XS and its API is
-quite different than this one. This module is written in pure perl but is still
-faster than L<Want>. See the benchmark.pl script in the author directory for
-more details. However, note Want does offer more features and can detect boolean
-context, context that expects a subroutine, and so on.
+quite different than this one. This module is written in pure perl but is 5 to
+10 times faster than L<Want>, though it does not have as many features.
 
 =head1 EXPORTS
 
